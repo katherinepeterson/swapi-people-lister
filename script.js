@@ -25,6 +25,8 @@ The function below will grab all of the data from the Star Wars api using a whil
 I couldn't use Promise.all with it and it runs slower. 
 So, the function below grabs more data but performance is better with the function above. 
 */
+let allData; 
+
 async function fetchPeople() {
     let response = await fetch('https://swapi.co/api/people/');
     let data = await response.json();
@@ -39,6 +41,12 @@ async function fetchPeople() {
     return responseArr;
 }
 
+async function getData(){
+    allData = await fetchPeople();
+}
+
+getData();
+
 const leftDiv = document.getElementById('left');
 const rightDiv = document.getElementById('right');
 
@@ -51,14 +59,14 @@ async function populateLeftDiv() {
 populateLeftDiv();
 
 leftDiv.addEventListener('click', async function(ev){
-    let data = await fetchPeople();
+    //let data = await fetchPeople();
     const listItems = Array.from(document.getElementsByTagName('LI'));
     if (ev.target.tagName === 'LI') {
         listItems.forEach(function(el){
             el.style = 'font-weight:normal';
         }) 
         ev.target.style = 'font-weight:bold';
-        let person = data[ev.target.id];
+        let person = allData[ev.target.id];
         rightDiv.innerHTML = `
         <p><b>Name:</b> ${person.name}</p>
         <p><b>Height:</b> ${person.height}</p>
