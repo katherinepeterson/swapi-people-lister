@@ -1,3 +1,7 @@
+/*
+The following function grabs the first 4 pages of data instead of using the next method to grab the next page. 
+So it doesn't actually grab all of the data but the page runs much faster using this function.
+I also could use Promise.all with this method, and I couldn't with the next method.
 
 async function fetchPeople() {
     const response = fetch('https://swapi.co/api/people/');
@@ -12,6 +16,26 @@ async function fetchPeople() {
     const page4 = await allResponses[3].json();
     const responseArr = [];
     responseArr.push(...page1.results, ...page2.results, ...page3.results, ...page4.results);
+    return responseArr;
+}
+*/
+
+/*
+The function below will grab all of the data from the Star Wars api using a while loop and the next method.
+I couldn't use Promise.all with it and it runs slower. 
+So, the function below grabs more data but performance is better with the function above. 
+*/
+async function fetchPeople() {
+    let response = await fetch('https://swapi.co/api/people/');
+    let data = await response.json();
+    const responseArr = [...data.results];
+
+    while (data.next !== null) {
+        response = await fetch(data.next);
+        data = await response.json();
+        responseArr.push(...data.results);
+    }
+    
     return responseArr;
 }
 
