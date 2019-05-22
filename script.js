@@ -25,13 +25,15 @@ The function below will grab all of the data from the Star Wars api using a whil
 I couldn't use Promise.all with it and it runs slower. 
 So, the function below grabs more data but performance is better with the function above. 
 */
+
+// It's often good practice to define your data type first by setting something (i.e. allData) equal to something blank to begin with .  Here, you might set allData equal to an empty array, so the user knows what will be defined later on.  Also, it avoids certain errors later in projects.
 let allData; 
 
 async function fetchPeople() {
     let response = await fetch('https://swapi.co/api/people/');
     let data = await response.json();
     const responseArr = [...data.results];
-
+    // ABSOLUTELY EXCELLENT use of a while loop in a practical way to loop through all possible responses!
     while (data.next !== null) {
         response = await fetch(data.next);
         data = await response.json();
